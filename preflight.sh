@@ -3,6 +3,9 @@
 # ===[Preflight installation checker for PE]===
 CLEAN=true
 
+# The last version this tool was tested against
+PE_RELEASE="3.7.2"
+
 # proxy detection
 curl "http://www.google.com" --connect-timeout 10 --max-time 10 --silent --output /dev/null
 if [ $? -ne 0 ] ; then
@@ -43,7 +46,7 @@ fi
 
 # Overall status
 if [ $CLEAN = true ] ; then
-  echo "No known issues detected, safe to install Puppet Enterprise"
+  echo "No known issues detected, safe to install Puppet Enterprise ${PE_RELEASE}"
 else
   exit 1
 fi
