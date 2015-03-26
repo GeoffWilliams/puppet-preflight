@@ -30,6 +30,7 @@ No known issues detected, safe to install Puppet Enterprise.  This script was la
 ```
 
 ## Detecting multiple issues
+```
 [root@master puppet-preflight]# ./preflight.sh 
 ./preflight.sh: line 15: /opt/puppet/bin/puppet: Permission denied
 A broken install of Puppet Enterprise was found at /opt/puppet  - maybe you need to delete it?
@@ -37,6 +38,7 @@ POSS config dir found at /etc/puppet - should be removed
 Stale PE configuration dir found at /etc/puppetlabs - maybe you need to delete it?
 *** PROBLEMS DETECTED ***
 Please investigate the above issues before attempting to install Puppet Enterprise
+```
 
 # Requirements
 * curl
