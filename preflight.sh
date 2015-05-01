@@ -67,7 +67,7 @@ fi
 # ENTERPRISE-531
 # Puppet Enterprise fails to install if /tmp mounted with the noexec option
 if [ "$(mount | awk /noexec/)" != "" ] ; then
-  echo "ENTERPRISE-351 -- filesystems mounted with noexec detected, please ensure /tmp is not mounted with the 'noexec' option"
+  echo "ENTERPRISE-531 -- filesystems mounted with noexec detected, please ensure /tmp is not mounted with the 'noexec' option"
   CLEAN=false
 fi
 
