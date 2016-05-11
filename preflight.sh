@@ -4,17 +4,17 @@
 CLEAN=true
 
 # The last version this tool was tested against
-PE_RELEASE="3.8.0"
+PE_RELEASE="2016.1.2"
 
-PE_DIR="/opt/puppet"
+PE_DIR="/opt/puppetlabs"
 PE_CONF_DIR="/etc/puppetlabs"
 POSS_CONF_DIR="/etc/puppet"
 WORKING_PE=false
 # install of puppet already exist?
 if [ -d $PE_DIR ] ; then
-  EXISTING_PE=$("${PE_DIR}/bin/puppet" --version)
+  EXISTING_PE=$("${PE_DIR}/puppet/bin/puppet" --version)
   if [ $? -eq 0 ] ; then
-    EXISTING_PE_VERSION=$(echo $EXISTING_PE | awk '{gsub(")","", $4); print $4}')
+    EXISTING_PE_VERSION=$(cat "${PE_DIR}/server/pe_version"||echo "BROKEN")
     echo "Found Puppet Enterprise ${EXISTING_PE_VERSION} at ${PE_DIR}"
     WORKING_PE=true
   else
@@ -24,7 +24,7 @@ if [ -d $PE_DIR ] ; then
 fi
 
 # other installs of puppet -eg from source/package
-OTHER_INSTALLS=$(find / -type f -not -path "${PE_DIR}/*" -name puppet -executable -type f)
+OTHER_INSTALLS=$(find / -type f -not -path "/etc/**" -not -path "${PE_DIR}/**" -name puppet -executable -type f)
 if [ "$OTHER_INSTALLS" != "" ] ; then
   echo "Non PE puppet executables found on system: (please remove them)"
   echo $OTHER_INSTALLS
