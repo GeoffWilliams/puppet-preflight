@@ -79,14 +79,6 @@ if [ $(stat -c '%a' /var/log) != "755" ] ; then
   CLEAN=false
 fi
 
-# BUGS PE-9506, SERVER-592, PE-9973
-# Jruby doesn't work on Debian/Ubuntu systems when libcrypt.so is not in the
-# default library path
-if [ ! -e "/usr/lib64" ] ; then
-  echo "PE-9506, SERVER-592, PE-9973 -- please ensure libcrypt.so available under /usr/lib64, eg: ln -s /lib/x86_64-linux-gnu/ /usr/lib64"
-  CLEAN=false
-fi
-
 # Overall status
 if [ $CLEAN = true ] ; then
   echo "No known issues detected, safe to install Puppet Enterprise.  This script was last tested with ${PE_RELEASE}"
