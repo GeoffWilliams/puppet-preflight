@@ -74,10 +74,24 @@ fi
 
 #  Bug  ENTERPRISE-553  
 # Puppet Enterprise fails to install if /var/log is not world readable and executable 
-if [ $(stat -c '%a' /var/log) != "755" ] ; then
+
+# permissions we want r-xr-xr-x or greater
+PERMS_WANT=0555
+
+# permissions on the directory
+PERMS_FILE=0$(stat -c '%a' /var/log)
+
+# bitwise and
+PERMS_HAVE=$(( $PERMS_FILE & $PERMS_WANT ))
+
+# convert back into octal (my eyes...)
+PERMS_HAVE=0$(printf %o $PERMS_HAVE)
+
+if [[ "$PERMS_HAVE" != "$PERMS_WANT" ]] ; then 
   echo "ENTERPRISE-553 -- please chmod +rx /var/log"
   CLEAN=false
 fi
+
 
 # Overall status
 if [ $CLEAN = true ] ; then
