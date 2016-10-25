@@ -4,7 +4,7 @@
 CLEAN=true
 
 # The last version this tool was tested against
-PE_RELEASE="2016.1.2"
+PE_RELEASE="2016.4.0"
 
 PE_DIR="/opt/puppetlabs"
 PE_CONF_DIR="/etc/puppetlabs"
@@ -60,14 +60,6 @@ fi
 # console fails to to render correctly due to incorrect mime types
 if [ -f /etc/mime.types ] && [ $(awk /css/ /etc/mime.types |wc -l) -eq 0 ] ; then
   echo "ENTERPRISE-532 -- please reinstall (or remove) the mailcap package"
-  CLEAN=false
-fi
-
-
-# ENTERPRISE-531
-# Puppet Enterprise fails to install if /tmp mounted with the noexec option
-if [ "$(mount | awk /noexec/)" != "" ] ; then
-  echo "ENTERPRISE-531 -- filesystems mounted with noexec detected, please ensure /tmp is not mounted with the 'noexec' option"
   CLEAN=false
 fi
 
