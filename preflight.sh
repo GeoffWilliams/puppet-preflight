@@ -64,8 +64,8 @@ if [ -f /etc/mime.types ] && [ $(awk /css/ /etc/mime.types |wc -l) -eq 0 ] ; the
 fi
 
 
-#  Bug  ENTERPRISE-553  
-# Puppet Enterprise fails to install if /var/log is not world readable and executable 
+#  Bug  ENTERPRISE-553
+# Puppet Enterprise fails to install if /var/log is not world readable and executable
 
 # permissions we want r-xr-xr-x or greater
 PERMS_WANT=0555
@@ -79,11 +79,26 @@ PERMS_HAVE=$(( $PERMS_FILE & $PERMS_WANT ))
 # convert back into octal (my eyes...)
 PERMS_HAVE=0$(printf %o $PERMS_HAVE)
 
-if [[ "$PERMS_HAVE" != "$PERMS_WANT" ]] ; then 
+if [[ "$PERMS_HAVE" != "$PERMS_WANT" ]] ; then
   echo "ENTERPRISE-553 -- please chmod +rx /var/log"
   CLEAN=false
 fi
 
+# Check CPU count
+cpu_cores=$(grep -c processor /proc/cpuinfo)
+if [[ $cpu_cores -lt 4 ]] ; then
+  echo "A Puppet master should have at least 4 CPU cores. Found ${cpu_cores}"
+  echo "Puppet Enterprise hardware requirements: https://docs.puppet.com/pe/latest/sys_req_hw.html#hardware-requirements"
+  CLEAN=false
+fi
+
+# Check RAM
+total_ram_kB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+if [[ $total_ram_kB -lt 8388608 ]] ; then
+  echo "A Puppet master should have at least 8 GB of ram. Found $(( total_ram_kB / 1024 / 1024 )) GB"
+  echo "Puppet Enterprise hardware requirements: https://docs.puppet.com/pe/latest/sys_req_hw.html#hardware-requirements"
+  CLEAN=false
+fi
 
 # Overall status
 if [ $CLEAN = true ] ; then
